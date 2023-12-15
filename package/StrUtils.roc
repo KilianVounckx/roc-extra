@@ -11,8 +11,10 @@ interface StrUtils
 ##
 ## ## Examples
 ## ```
-## expect hexEncode [0xde, 0xad, 0xbe, 0xaf] == "deadbeaf"
-## expect hexEncode [] == ""
+## expect StrUtils.hexEncode [0xde, 0xad, 0xbe, 0xaf] == "deadbeaf"
+## ```
+## ```
+## expect StrUtils.hexEncode [] == ""
 ## ```
 hexEncode : List U8 -> Str
 hexEncode = \bytes ->
@@ -39,8 +41,10 @@ byteToHex = \c ->
 ##
 ## ## Examples
 ## ```
-## expect hexEncode [0xde, 0xad, 0xbe, 0xaf] == "deadbeaf"
-## expect hexEncode [] == ""
+## expect StrUtils.hexEncode [0xde, 0xad, 0xbe, 0xaf] == "deadbeaf"
+## ```
+## ```
+## expect StrUtils.hexEncode [] == ""
 ## ```
 hexDecode : Str -> Result (List U8) [InvalidHex]
 hexDecode = \hex ->
