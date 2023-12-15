@@ -1,3 +1,6 @@
 package "extra"
-    exposes []
+    exposes [
+        ResultUtils,
+        StrUtils,
+    ]
     packages {}
