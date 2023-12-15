@@ -15,6 +15,10 @@ interface Utils
 ## kind of situations, you need a function which calls itself recursively.
 ## Sometimes this feels like overkill, so in these situations `loop` can help.
 ##
+## This function can also be thought of as the functional equivalent of
+## an imperative 'while' loop, whereas functions like [List.map] and [List.walk]
+## are equivalent to imperative `for` loops.
+##
 ## ## Examples
 ##
 ## Consider the following function to calculate the n'th Fibonacci number:
