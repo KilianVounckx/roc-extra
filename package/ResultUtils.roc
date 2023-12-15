@@ -8,7 +8,7 @@ interface ResultUtils
 ## `okOrCrash err` takes a result and returns its `Ok` value.
 ## If the result contains an `Err` value, crashes with its Inspect string.
 ##
-## If you want more control over the crash message, see `okOrCrashMessage`
+## If you want more control over the crash message, see [okOrCrashMessage]
 okOrCrash : Result a err -> a where err implements Inspect
 okOrCrash = \result ->
     okOrCrashWithMessage result Inspect.toStr
