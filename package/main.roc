@@ -3,5 +3,6 @@ package "extra"
         ListUtils,
         ResultUtils,
         StrUtils,
+        Utils,
     ]
     packages {}
