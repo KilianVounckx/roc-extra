@@ -1,11 +1,31 @@
 interface ListUtils
     exposes [
+        minMax,
         mapAdjacent,
         build,
     ]
     imports [
         Utils,
     ]
+
+## `minMax list` returns a record containing both the minimum and maximum of a list
+##
+## ## Tags
+## * stdplz
+minMax : List (Num a) -> Result { min : Num a, max : Num a } [ListWasEmpty]
+minMax = \list ->
+    when list is
+        [] -> Err ListWasEmpty
+        [first, .. as rest] ->
+            rest
+            |> List.walk { min: first, max: first } \acc, x ->
+                if x < acc.min then
+                    { acc & min: x }
+                else if x > acc.max then
+                    { acc & max: x }
+                else
+                    acc
+            |> Ok
 
 ## `mapAdjacent list func` takes any two adjacent pairs in `list`, applies
 ## `func` to them, and stores the results in a new list.
