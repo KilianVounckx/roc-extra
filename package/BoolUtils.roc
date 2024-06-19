@@ -1,6 +1,7 @@
 module [
     guard,
     lazyGuard,
+    toNum,
 ]
 
 ## `guard condition return otherwise` is a convenience function to mimic
