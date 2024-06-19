@@ -2,6 +2,7 @@ module [
     minMax,
     mapAdjacent,
     build,
+    compare,
 ]
 
 import Utils
@@ -81,3 +82,26 @@ expect
                 Continue { state: (b, a + b, left - 1), value: a }
 
     fibs 10 == [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
+## `compare fun` takes a comparison function for some type, and returns a
+## lexicographical comparison function for a list containing that type.
+## The resulting function can be used in [List.sortWith].
+##
+## ## Tags
+## * stdplz
+compare : (a, a -> [LT, EQ, GT]) -> (List a, List a -> [LT, EQ, GT])
+compare = \fun ->
+    \list1, list2 ->
+        List.map2 list1 list2 \x1, x2 -> (x1, x2)
+        |> List.walkUntil EQ \_, (x1, x2) ->
+            when fun x1 x2 is
+                LT -> Break LT
+                GT -> Break GT
+                EQ -> Continue EQ
+
+expect
+    fun = compare Num.compare
+    unsorted = [[3, 2, 3], [3, 3], [4, 3], [2, 5], [2, 4], [1, 2]]
+    expected = [[1, 2], [2, 4], [2, 5], [3, 2, 3], [3, 3], [4, 3]]
+    got = List.sortWith unsorted fun
+    got == expected
