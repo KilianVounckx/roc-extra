@@ -3,6 +3,7 @@ module [
     mapAdjacent,
     build,
     compare,
+    findMap,
 ]
 
 import Utils
@@ -105,3 +106,21 @@ expect
     expected = [[1, 2], [2, 4], [2, 5], [3, 2, 3], [3, 3], [4, 3]]
     got = List.sortWith unsorted fun
     got == expected
+
+## `findMap list fun` returns the first element in `list` for which `fun`
+## returns `Ok value`, then returns the wrapped `value`. Returns `Err NotFound`
+## if no such element is found.
+##
+## ## Tags
+## * stdplz
+findMap : List a, (a -> Result b *) -> Result b [NotFound]
+findMap = \list, fun ->
+    list
+    |> List.walkUntil (Err NotFound) \_, elem ->
+        when fun elem is
+            Ok out -> Break (Ok out)
+            Err _ -> Continue (Err NotFound)
+
+expect findMap [[], [2], [3]] List.first == Ok 2
+expect findMap [[], [], []] List.first == Err NotFound
+expect findMap [] List.first == Err NotFound
