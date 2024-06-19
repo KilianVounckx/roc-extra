@@ -32,6 +32,7 @@ expect clamp -2 { min: -1, max: 1 } == -1
 expect clamp 2 { min: -1, max: 1 } == 1
 
 ## `digits num base` splits `num` into its digit representation in `base`.
+## Returns an error if `num` is negative, or if `base` is an invalid base.
 digits : Int a, Int a -> Result (List (Int a)) [InvalidBase, Negative]
 digits = \num, base ->
     {} <- BoolUtils.guard (num < 0) (Err Negative)
@@ -49,12 +50,16 @@ expect digits 123 2 == Ok [1, 1, 1, 1, 0, 1, 1]
 expect digits 123 1 == Err InvalidBase
 expect digits -123 10 == Err Negative
 
-undigits : List (Int a), Int a -> Result (Int a) [InvalidBase, Negative]
+## `undigits digitList base` joins `digitList` into a single value. Returns an
+## error if a digit is negative or of invalid in `base`, or if `base` itself
+## is invalid.
+undigits : List (Int a), Int a -> Result (Int a) [InvalidBase, Negative, InvalidDigit]
 undigits = \digitList, base ->
     {} <- BoolUtils.guard (base < 2) (Err InvalidBase)
     digitList
     |> List.walkTry 0 \acc, digit ->
         {} <- BoolUtils.guard (digit < 0) (Err Negative)
+        {} <- BoolUtils.guard (digit >= base) (Err InvalidDigit)
         Ok (acc * base + digit)
 
 expect undigits [] 10 == Ok 0
@@ -62,4 +67,5 @@ expect undigits [1, 2, 3] 10 == Ok 123
 expect undigits [1, 1, 1, 1, 0, 1, 1] 2 == Ok 123
 expect undigits [] 1 == Err InvalidBase
 expect undigits [1, -1] 10 == Err Negative
+expect undigits [1, 11] 10 == Err InvalidDigit
 
