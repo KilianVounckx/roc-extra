@@ -1,5 +1,7 @@
 module [
     clamp,
+    digits,
+    undigits,
 ]
 
 import BoolUtils
