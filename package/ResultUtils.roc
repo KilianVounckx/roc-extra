@@ -56,6 +56,9 @@ expect
 ## `withLazyDefault result err` takes a result and returns its `Ok` value.
 ## If the result contains an `Err`, calls `fun` on its payload and returns
 ## its output.
+##
+## ## Tags
+## * stdplz
 withLazyDefault : Result a err, (err -> a) -> a
 withLazyDefault = \result, fun ->
     when result is
