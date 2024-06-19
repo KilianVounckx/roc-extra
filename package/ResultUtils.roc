@@ -1,9 +1,8 @@
-interface ResultUtils
-    exposes [
-        okOrCrash,
-        okOrCrashWithMessage,
-    ]
-    imports []
+module [
+    okOrCrash,
+    okOrCrashWithMessage,
+    withLazyDefault,
+]
 
 ## `okOrCrash err` takes a result and returns its `Ok` value.
 ## If the result contains an `Err` value, crashes with its Inspect string.
@@ -31,9 +30,7 @@ expect
 ## the resulting string as a message
 okOrCrashWithMessage : Result a err, (err -> Str) -> a
 okOrCrashWithMessage = \result, msg ->
-    when result is
-        Ok x -> x
-        Err err -> crash (msg err)
+    withLazyDefault result (\err -> crash (msg err))
 
 expect
     result : Result U32 []
@@ -55,3 +52,36 @@ expect
     result : Result Str [SomeError]
     result = Ok "hi"
     okOrCrashWithMessage result Inspect.toStr == "hi"
+
+## `withLazyDefault result err` takes a result and returns its `Ok` value.
+## If the result contains an `Err`, calls `fun` on its payload and returns
+## its output.
+withLazyDefault : Result a err, (err -> a) -> a
+withLazyDefault = \result, fun ->
+    when result is
+        Ok x -> x
+        Err err -> fun err
+
+expect
+    result : Result U32 []
+    result = Ok 42
+    withLazyDefault result (\_ -> 50) == 42
+
+expect
+    result : Result U32 [NeverUsed]
+    result = Err NeverUsed
+    withLazyDefault result (\_ -> 50) == 50
+
+expect
+    result : Result U32 [This, That]
+    result = Err This
+    (
+        withLazyDefault
+            result
+            (\err ->
+                when err is
+                    This -> 50
+                    That -> 60
+            )
+    )
+    == 50
