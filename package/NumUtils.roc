@@ -41,7 +41,23 @@ digits = \num, base ->
             helper (x // base) (List.append acc (x % base))
     Ok (helper num [])
 
+expect digits 0 10 == Ok [0]
 expect digits 123 10 == Ok [1, 2, 3]
 expect digits 123 2 == Ok [1, 1, 1, 1, 0, 1, 1]
 expect digits 123 1 == Err InvalidBase
 expect digits -123 10 == Err Negative
+
+undigits : List (Int a), Int a -> Result (Int a) [InvalidBase, Negative]
+undigits = \digitList, base ->
+    {} <- BoolUtils.guard (base < 2) (Err InvalidBase)
+    digitList
+    |> List.walkTry 0 \acc, digit ->
+        {} <- BoolUtils.guard (digit < 0) (Err Negative)
+        Ok (acc * base + digit)
+
+expect undigits [] 10 == Ok 0
+expect undigits [1, 2, 3] 10 == Ok 123
+expect undigits [1, 1, 1, 1, 0, 1, 1] 2 == Ok 123
+expect undigits [] 1 == Err InvalidBase
+expect undigits [1, -1] 10 == Err Negative
+
