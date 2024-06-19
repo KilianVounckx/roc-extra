@@ -8,6 +8,9 @@ module [
 ##
 ## This function uses `expect` to check that `min` is smaller than or equal to
 ## `max`. This can be used in tests to check for proper usage.
+##
+## ## Tags
+## * stdplz
 clamp : Num a, { min : Num a, max : Num a } -> Num a
 clamp = \num, { min, max } ->
     expect
