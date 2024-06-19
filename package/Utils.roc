@@ -1,8 +1,6 @@
-interface Utils
-    exposes [
-        loop,
-    ]
-    imports []
+module [
+    loop,
+]
 
 ## `loop init func` repeatedly applies `func` to init. Whenever the output has
 ## tag `Continue`, its payload is `func`'s next input. When the output first

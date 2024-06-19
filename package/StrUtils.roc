@@ -1,11 +1,9 @@
-interface StrUtils
-    exposes [
-        hexEncode,
-        hexDecode,
-    ]
-    imports [
-        ResultUtils,
-    ]
+module [
+    hexEncode,
+    hexDecode,
+]
+
+import ResultUtils
 
 ## `hexEncode bytes` returns the hex encoding of `bytes`.
 ##

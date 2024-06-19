@@ -1,8 +1,6 @@
-package "extra"
-    exposes [
-        ListUtils,
-        ResultUtils,
-        StrUtils,
-        Utils,
-    ]
-    packages {}
+package [
+    ListUtils,
+    ResultUtils,
+    StrUtils,
+    Utils,
+] {}

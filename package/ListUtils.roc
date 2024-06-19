@@ -1,12 +1,10 @@
-interface ListUtils
-    exposes [
-        minMax,
-        mapAdjacent,
-        build,
-    ]
-    imports [
-        Utils,
-    ]
+module [
+    minMax,
+    mapAdjacent,
+    build,
+]
+
+import Utils
 
 ## `minMax list` returns a record containing both the minimum and maximum of a list
 ##
