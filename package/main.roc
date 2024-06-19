@@ -1,4 +1,5 @@
 package [
+    BoolUtils,
     ListUtils,
     ResultUtils,
     StrUtils,
